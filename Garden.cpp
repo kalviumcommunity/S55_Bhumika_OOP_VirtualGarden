@@ -11,25 +11,25 @@ public:
     int maxWaterLevel;
 
     Plant(string n, string t, int maxWater) {
-        name = n;
-        type =t;
-        growthStage ="seedling";
-        waterLevel =0; 
-        maxWaterLevel =maxWater;
-        }
+        this->name = n; 
+        this->type = t; 
+        this->growthStage = "seedling";
+        this->waterLevel = 0;
+        this->maxWaterLevel = maxWater; 
+    }
 
     void water() {
-        if (waterLevel < maxWaterLevel) {
-            waterLevel++;
-            cout << name << " has been watered. Current water level: " << waterLevel << endl;
+        if (this->waterLevel < this->maxWaterLevel) { 
+            this->waterLevel++; 
+            cout << this->name << " has been watered. Current water level: " << this->waterLevel << endl; // Used this pointer here
         } else {
-            cout << name << " is fully watered." << endl;
+            cout << this->name << " is fully watered." << endl; 
         }
     }
 
     void displayStatus() {
-        cout << "Plant: " << name << ", Type: " << type << ", Growth Stage: " << growthStage
-             << ", Water Level: " << waterLevel << "/" << maxWaterLevel << endl;
+        cout << "Plant: " << this->name << ", Type: " << this->type << ", Growth Stage: " << this->growthStage
+             << ", Water Level: " << this->waterLevel << "/" << this->maxWaterLevel << endl; 
     }
 };
 
