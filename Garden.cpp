@@ -10,61 +10,40 @@ public:
     int waterLevel;
     int maxWaterLevel;
 
-    Plant(string n, string t, int maxWater) {
-        this->name = n; 
-        this->type = t; 
+    Plant() {
+        this->name = "";
+        this->type = "";
         this->growthStage = "seedling";
         this->waterLevel = 0;
-        this->maxWaterLevel = maxWater; 
+        this->maxWaterLevel = 0;
+    }
+
+    Plant(string n, string t, int maxWater) {
+        this->name = n;
+        this->type = t;
+        this->growthStage = "seedling";
+        this->waterLevel = 0;
+        this->maxWaterLevel = maxWater;
     }
 
     void water() {
-        if (this->waterLevel < this->maxWaterLevel) { 
-            this->waterLevel++; 
-            cout << this->name << " has been watered. Current water level: " << this->waterLevel << endl; // Used this pointer here
+        if (this->waterLevel < this->maxWaterLevel) {
+            this->waterLevel++;
+            cout << this->name << " has been watered. Current water level: " << this->waterLevel << endl;
         } else {
-            cout << this->name << " is fully watered." << endl; 
+            cout << this->name << " is fully watered." << endl;
         }
     }
 
-    void displayStatus() {
+    void displayStatus() const {
         cout << "Plant: " << this->name << ", Type: " << this->type << ", Growth Stage: " << this->growthStage
-             << ", Water Level: " << this->waterLevel << "/" << this->maxWaterLevel << endl; 
-    }
-};
-
-class Garden {
-public:
-    Plant* plants[10];
-    int plantCount;
-
-    Garden() : plantCount(0) {}
-
-    void addPlant(Plant* p) {
-        if (plantCount < 10) {
-            plants[plantCount++] = p;
-            cout << p->name << " has been added to the garden." << endl;
-        } else {
-            cout << "The garden is full!" << endl;
-        }
-    }
-
-    void waterAll() {
-        for (int i = 0; i < plantCount; i++) {
-            plants[i]->water();
-        }
-    }
-
-    void displayAllPlants() {
-        for (int i = 0; i < plantCount; i++) {
-            plants[i]->displayStatus();
-        }
+             << ", Water Level: " << this->waterLevel << "/" << this->maxWaterLevel << endl;
     }
 };
 
 class User {
 public:
-    void createPlant(Garden& g) {
+    void createPlant(Plant& p) {
         string name, type;
         int maxWaterLevel;
         cout << "Enter plant name: ";
@@ -74,28 +53,33 @@ public:
         cout << "Enter maximum water level: ";
         cin >> maxWaterLevel;
 
-        Plant* p = new Plant(name, type, maxWaterLevel);
-        g.addPlant(p);
+        p = Plant(name, type, maxWaterLevel);
     }
 
-    void waterPlants(Garden& g) {
-        g.waterAll();
+    void waterPlants(Plant plants[], int size) {
+        for (int i = 0; i < size; i++) {
+            plants[i].water();
+        }
     }
 
-    void checkPlants(Garden& g) {
-        g.displayAllPlants();
+    void checkPlants(const Plant plants[], int size) const {
+        for (int i = 0; i < size; i++) {
+            plants[i].displayStatus();
+        }
     }
 };
 
 int main() {
-    Garden myGarden;
+    const int gardenSize = 2;
+    Plant myGarden[gardenSize];
     User user;
 
-    user.createPlant(myGarden);
+    for (int i = 0; i < gardenSize; i++) {
+        user.createPlant(myGarden[i]);
+    }
 
-    user.waterPlants(myGarden);
-
-    user.checkPlants(myGarden);
+    user.waterPlants(myGarden, gardenSize);
+    user.checkPlants(myGarden, gardenSize);
 
     return 0;
 }
