@@ -56,13 +56,20 @@ public:
         p = Plant(name, type, maxWaterLevel);
     }
 
-    void waterPlants(Plant plants[], int size) {
-        for (int i = 0; i < size; i++) {
-            plants[i].water();
+    void waterPlants(Plant* plants, int size) { 
+        bool allPlantsFullyWatered = false;
+        while (!allPlantsFullyWatered) {
+            allPlantsFullyWatered = true; // Assume all plants are fully watered
+            for (int i = 0; i < size; i++) {
+                if (plants[i].waterLevel < plants[i].maxWaterLevel) {
+                    plants[i].water(); // Water the plant
+                    allPlantsFullyWatered = false; // Found a plant that still needs watering
+                }
+            }
         }
     }
 
-    void checkPlants(const Plant plants[], int size) const {
+    void checkPlants(const Plant* plants, int size) const { 
         for (int i = 0; i < size; i++) {
             plants[i].displayStatus();
         }
@@ -71,15 +78,16 @@ public:
 
 int main() {
     const int gardenSize = 2;
-    Plant myGarden[gardenSize];
+    Plant* myGarden = new Plant[gardenSize]; 
     User user;
 
     for (int i = 0; i < gardenSize; i++) {
-        user.createPlant(myGarden[i]);
+        user.createPlant(myGarden[i]); 
     }
 
-    user.waterPlants(myGarden, gardenSize);
-    user.checkPlants(myGarden, gardenSize);
+    user.waterPlants(myGarden, gardenSize); 
+    user.checkPlants(myGarden, gardenSize); 
 
+    delete[] myGarden; 
     return 0;
 }
