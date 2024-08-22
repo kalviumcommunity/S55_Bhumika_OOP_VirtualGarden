@@ -12,7 +12,6 @@ public:
     int waterLevel;
     int maxWaterLevel;
 
-    
     Plant() {
         this->name = "";
         this->type = "";
@@ -21,6 +20,7 @@ public:
         this->maxWaterLevel = 0;
         totalPlants++; 
     }
+
     Plant(string n, string t, int maxWater) {
         this->name = n;
         this->type = t;
@@ -29,9 +29,6 @@ public:
         this->maxWaterLevel = maxWater;
         totalPlants++; 
     }
-
-    // this is a destructor,
-    //  it destorys and decrements the value/count of plants
 
     ~Plant() {
         totalPlants--; 
