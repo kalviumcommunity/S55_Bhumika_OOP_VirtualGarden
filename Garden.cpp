@@ -6,12 +6,15 @@ class Plant {
 public:
     static int totalPlants; 
     static int totalWaterUsed; 
+
+private:
     string name;
     string type;
     string growthStage;
     int waterLevel;
     int maxWaterLevel;
 
+public:
     Plant() {
         this->name = "";
         this->type = "";
@@ -22,11 +25,11 @@ public:
     }
 
     Plant(string n, string t, int maxWater) {
-        this->name = n;
-        this->type = t;
-        this->growthStage = "seedling";
-        this->waterLevel = 0;
-        this->maxWaterLevel = maxWater;
+        setName(n);
+        setType(t);
+        setGrowthStage("seedling");
+        setWaterLevel(0);
+        setMaxWaterLevel(maxWater);
         totalPlants++; 
     }
 
@@ -34,19 +37,34 @@ public:
         totalPlants--; 
     }
 
+    void setName(string n) { this->name = n; }
+    string getName() const { return this->name; }
+
+    void setType(string t) { this->type = t; }
+    string getType() const { return this->type; }
+
+    void setGrowthStage(string stage) { this->growthStage = stage; }
+    string getGrowthStage() const { return this->growthStage; }
+
+    void setWaterLevel(int level) { this->waterLevel = level; }
+    int getWaterLevel() const { return this->waterLevel; }
+
+    void setMaxWaterLevel(int level) { this->maxWaterLevel = level; }
+    int getMaxWaterLevel() const { return this->maxWaterLevel; }
+
     void water() {
         if (this->waterLevel < this->maxWaterLevel) {
-            this->waterLevel++;
+            setWaterLevel(this->waterLevel + 1);
             totalWaterUsed++; 
-            cout << this->name << " has been watered. Current water level: " << this->waterLevel << endl;
+            cout << getName() << " has been watered. Current water level: " << getWaterLevel() << endl;
         } else {
-            cout << this->name << " is fully watered." << endl;
+            cout << getName() << " is fully watered." << endl;
         }
     }
 
     void displayStatus() const {
-        cout << "Plant: " << this->name << ", Type: " << this->type << ", Growth Stage: " << this->growthStage
-             << ", Water Level: " << this->waterLevel << "/" << this->maxWaterLevel << endl;
+        cout << "Plant: " << getName() << ", Type: " << getType() << ", Growth Stage: " << getGrowthStage()
+             << ", Water Level: " << getWaterLevel() << "/" << getMaxWaterLevel() << endl;
     }
 
     static void displayStatics() {
@@ -59,7 +77,13 @@ int Plant::totalPlants = 0;
 int Plant::totalWaterUsed = 0;
 
 class User {
+private:
+    string userName;
+
 public:
+    void setUserName(string name) { this->userName = name; }
+    string getUserName() const { return this->userName; }
+
     void createPlant(Plant& p) {
         string name, type;
         int maxWaterLevel;
@@ -78,7 +102,7 @@ public:
         while (!allPlantsFullyWatered) {
             allPlantsFullyWatered = true;
             for (int i = 0; i < size; i++) {
-                if (plants[i].waterLevel < plants[i].maxWaterLevel) {
+                if (plants[i].getWaterLevel() < plants[i].getMaxWaterLevel()) {
                     plants[i].water();
                     allPlantsFullyWatered = false;
                 }
