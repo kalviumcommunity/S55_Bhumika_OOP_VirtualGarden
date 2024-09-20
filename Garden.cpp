@@ -14,6 +14,7 @@ public:
     static int totalPlants; 
     static int totalWaterUsed;
 
+    // Default constructor
     Plant() {
         this->name = "";
         this->type = "";
@@ -23,6 +24,7 @@ public:
         totalPlants++; 
     }
 
+    // Parameterized constructor
     Plant(string n, string t, int maxWater) {
         setName(n);
         setType(t);
@@ -32,6 +34,7 @@ public:
         totalPlants++; 
     }
 
+    // Destructor
     ~Plant() {
         totalPlants--; 
     }
@@ -93,6 +96,7 @@ public:
         cout << "Enter maximum water level: ";
         cin >> maxWaterLevel;
 
+        // Use parameterized constructor to update plant
         p = Plant(name, type, maxWaterLevel);
     }
 
@@ -118,11 +122,12 @@ public:
 
 int main() {
     const int gardenSize = 2;
-    Plant* myGarden = new Plant[gardenSize];
+    Plant* myGarden = new Plant[gardenSize];  // Default constructor called here
     User user;
 
+    // Create plants using parameterized constructor
     for (int i = 0; i < gardenSize; i++) {
-        user.createPlant(myGarden[i]);
+        user.createPlant(myGarden[i]);  // Parameterized constructor called here
     }
 
     user.waterPlants(myGarden, gardenSize);
@@ -130,6 +135,6 @@ int main() {
 
     Plant::displayStatics();
 
-    delete[] myGarden;
+    delete[] myGarden;  // Clean up dynamic memory
     return 0;
 }
