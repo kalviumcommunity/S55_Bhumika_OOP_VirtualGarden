@@ -3,18 +3,17 @@
 using namespace std;
 
 class Plant {
-public:
-    static int totalPlants; 
-    static int totalWaterUsed; 
-
-private:
+private: 
     string name;
     string type;
     string growthStage;
     int waterLevel;
     int maxWaterLevel;
 
-public:
+public: 
+    static int totalPlants; 
+    static int totalWaterUsed;
+
     Plant() {
         this->name = "";
         this->type = "";
@@ -77,7 +76,7 @@ int Plant::totalPlants = 0;
 int Plant::totalWaterUsed = 0;
 
 class User {
-private:
+private: 
     string userName;
 
 public:
