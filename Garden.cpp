@@ -3,15 +3,15 @@
 using namespace std;
 
 class Plant {
-private: 
+private:
     string name;
     string type;
     string growthStage;
     int waterLevel;
     int maxWaterLevel;
 
-public: 
-    static int totalPlants; 
+public:
+    static int totalPlants;
     static int totalWaterUsed;
 
     // Default constructor
@@ -21,22 +21,22 @@ public:
         this->growthStage = "seedling";
         this->waterLevel = 0;
         this->maxWaterLevel = 0;
-        totalPlants++; 
+        totalPlants++;
     }
 
     // Parameterized constructor
     Plant(string n, string t, int maxWater) {
-        setName(n);
-        setType(t);
-        setGrowthStage("seedling");
-        setWaterLevel(0);
-        setMaxWaterLevel(maxWater);
-        totalPlants++; 
+        name = n;
+        type = t;
+        growthStage = "seedling";
+        waterLevel = 0;
+        maxWaterLevel = maxWater;
+        totalPlants++;
     }
 
     // Destructor
     ~Plant() {
-        totalPlants--; 
+        totalPlants--;
     }
 
     void setName(string n) { this->name = n; }
@@ -57,7 +57,7 @@ public:
     void water() {
         if (this->waterLevel < this->maxWaterLevel) {
             setWaterLevel(this->waterLevel + 1);
-            totalWaterUsed++; 
+            totalWaterUsed++;
             cout << getName() << " has been watered. Current water level: " << getWaterLevel() << endl;
         } else {
             cout << getName() << " is fully watered." << endl;
@@ -78,29 +78,79 @@ public:
 int Plant::totalPlants = 0;
 int Plant::totalWaterUsed = 0;
 
+// Single Inheritance
+class FloweringPlant : public Plant {
+private:
+    string flowerColor;
+
+public:
+   
+    FloweringPlant(string name, string type, int maxWater, string color) : Plant(name, type, maxWater) {
+        flowerColor = color;
+    }
+
+    FloweringPlant() : Plant() {}  
+
+    void setFlowerColor(string color) { flowerColor = color; }
+    string getFlowerColor() const { return flowerColor; }
+
+    void displayFlowerInfo() const {
+        cout << "Flower Color: " << getFlowerColor() << endl;
+    }
+};
+
+// Multilevel Inheritance
+class GardenPlant : public FloweringPlant {
+private:
+    string season;  
+
+public:
+    GardenPlant(string name, string type, int maxWater, string color, string bloomSeason)
+        : FloweringPlant(name, type, maxWater, color) {
+        season = bloomSeason;
+    }
+
+    GardenPlant() : FloweringPlant() {}  
+
+    void setSeason(string s) { season = s; }
+    string getSeason() const { return season; }
+
+    void displayGardenPlantInfo() const {
+        displayStatus();         
+        displayFlowerInfo();    
+        cout << "Bloom Season: " << getSeason() << endl;
+    }
+};
+
+
 class User {
-private: 
+private:
     string userName;
 
 public:
     void setUserName(string name) { this->userName = name; }
     string getUserName() const { return this->userName; }
 
-    void createPlant(Plant& p) {
-        string name, type;
+    void createGardenPlant(GardenPlant& p) {
+        string name, type, color, season;
         int maxWaterLevel;
+
         cout << "Enter plant name: ";
         cin >> name;
         cout << "Enter plant type (e.g., flower, vegetable): ";
         cin >> type;
         cout << "Enter maximum water level: ";
         cin >> maxWaterLevel;
+        cout << "Enter flower color: ";
+        cin >> color;
+        cout << "Enter bloom season: ";
+        cin >> season;
 
-        // Use parameterized constructor to update plant
-        p = Plant(name, type, maxWaterLevel);
+       
+        p = GardenPlant(name, type, maxWaterLevel, color, season);
     }
 
-    void waterPlants(Plant* plants, int size) {
+    void waterPlants(GardenPlant* plants, int size) {
         bool allPlantsFullyWatered = false;
         while (!allPlantsFullyWatered) {
             allPlantsFullyWatered = true;
@@ -113,28 +163,27 @@ public:
         }
     }
 
-    void checkPlants(const Plant* plants, int size) const {
+    void checkPlants(const GardenPlant* plants, int size) const {
         for (int i = 0; i < size; i++) {
-            plants[i].displayStatus();
+            plants[i].displayGardenPlantInfo();
         }
     }
 };
 
 int main() {
     const int gardenSize = 2;
-    Plant* myGarden = new Plant[gardenSize];  // Default constructor called here
-    User user;
+    GardenPlant* myGarden = new GardenPlant[gardenSize];  
 
-    // Create plants using parameterized constructor
+    User user;
     for (int i = 0; i < gardenSize; i++) {
-        user.createPlant(myGarden[i]);  // Parameterized constructor called here
+        user.createGardenPlant(myGarden[i]);  
     }
 
-    user.waterPlants(myGarden, gardenSize);
-    user.checkPlants(myGarden, gardenSize);
+    user.waterPlants(myGarden, gardenSize);  
+    user.checkPlants(myGarden, gardenSize);  
 
-    Plant::displayStatics();
+    Plant::displayStatics();  
 
-    delete[] myGarden;  // Clean up dynamic memory
+    delete[] myGarden;  
     return 0;
 }
