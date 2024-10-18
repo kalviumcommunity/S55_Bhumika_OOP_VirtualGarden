@@ -2,7 +2,13 @@
 #include <string>
 using namespace std;
 
-class Plant {
+class AbstractPlant {
+public:
+    virtual void water() = 0; 
+    virtual void displayStatus() const = 0; 
+};
+
+class Plant : public AbstractPlant {
 private:
     string name;
     string type;
@@ -55,7 +61,7 @@ public:
     void setMaxWaterLevel(int level) { this->maxWaterLevel = level; }
     int getMaxWaterLevel() const { return this->maxWaterLevel; }
 
-    void water() {
+    void water() override {
         if (this->waterLevel < this->maxWaterLevel) {
             setWaterLevel(this->waterLevel + 1);
             totalWaterUsed++;
@@ -65,7 +71,7 @@ public:
         }
     }
 
-    void displayStatus() const {
+    void displayStatus() const override { 
         cout << "Plant: " << getName() << ", Type: " << getType()
              << ", Growth Stage: " << getGrowthStage()
              << ", Water Level: " << getWaterLevel() << "/" << getMaxWaterLevel() << endl;
@@ -77,7 +83,6 @@ public:
     }
 };
 
-// Static variable initialization
 int Plant::totalPlants = 0;
 int Plant::totalWaterUsed = 0;
 
@@ -98,6 +103,11 @@ public:
     void displayFlowerInfo() const {
         cout << "Flower Color: " << getFlowerColor() << endl;
     }
+
+    void displayStatus() const override { 
+        Plant::displayStatus(); 
+        displayFlowerInfo();
+    }
 };
 
 // Multilevel Inheritance
@@ -115,8 +125,7 @@ public:
     string getSeason() const { return season; }
 
     void displayGardenPlantInfo() const {
-        displayStatus();
-        displayFlowerInfo();
+        displayStatus(); 
         cout << "Bloom Season: " << getSeason() << endl;
     }
 };
