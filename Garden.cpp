@@ -39,6 +39,7 @@ public:
         totalPlants--;
     }
 
+    // Member functions
     void setName(string n) { this->name = n; }
     string getName() const { return this->name; }
 
@@ -65,7 +66,8 @@ public:
     }
 
     void displayStatus() const {
-        cout << "Plant: " << getName() << ", Type: " << getType() << ", Growth Stage: " << getGrowthStage()
+        cout << "Plant: " << getName() << ", Type: " << getType()
+             << ", Growth Stage: " << getGrowthStage()
              << ", Water Level: " << getWaterLevel() << "/" << getMaxWaterLevel() << endl;
     }
 
@@ -75,6 +77,7 @@ public:
     }
 };
 
+// Static variable initialization
 int Plant::totalPlants = 0;
 int Plant::totalWaterUsed = 0;
 
@@ -84,12 +87,10 @@ private:
     string flowerColor;
 
 public:
-   
-    FloweringPlant(string name, string type, int maxWater, string color) : Plant(name, type, maxWater) {
-        flowerColor = color;
-    }
+    FloweringPlant(string name, string type, int maxWater, string color)
+        : Plant(name, type, maxWater), flowerColor(color) {}
 
-    FloweringPlant() : Plant() {}  
+    FloweringPlant() : Plant() {}
 
     void setFlowerColor(string color) { flowerColor = color; }
     string getFlowerColor() const { return flowerColor; }
@@ -102,26 +103,23 @@ public:
 // Multilevel Inheritance
 class GardenPlant : public FloweringPlant {
 private:
-    string season;  
+    string season;
 
 public:
     GardenPlant(string name, string type, int maxWater, string color, string bloomSeason)
-        : FloweringPlant(name, type, maxWater, color) {
-        season = bloomSeason;
-    }
+        : FloweringPlant(name, type, maxWater, color), season(bloomSeason) {}
 
-    GardenPlant() : FloweringPlant() {}  
+    GardenPlant() : FloweringPlant() {}
 
     void setSeason(string s) { season = s; }
     string getSeason() const { return season; }
 
     void displayGardenPlantInfo() const {
-        displayStatus();         
-        displayFlowerInfo();    
+        displayStatus();
+        displayFlowerInfo();
         cout << "Bloom Season: " << getSeason() << endl;
     }
 };
-
 
 class User {
 private:
@@ -146,7 +144,6 @@ public:
         cout << "Enter bloom season: ";
         cin >> season;
 
-       
         p = GardenPlant(name, type, maxWaterLevel, color, season);
     }
 
@@ -172,18 +169,18 @@ public:
 
 int main() {
     const int gardenSize = 2;
-    GardenPlant* myGarden = new GardenPlant[gardenSize];  
+    GardenPlant* myGarden = new GardenPlant[gardenSize];
 
     User user;
     for (int i = 0; i < gardenSize; i++) {
-        user.createGardenPlant(myGarden[i]);  
+        user.createGardenPlant(myGarden[i]);
     }
 
-    user.waterPlants(myGarden, gardenSize);  
-    user.checkPlants(myGarden, gardenSize);  
+    user.waterPlants(myGarden, gardenSize);
+    user.checkPlants(myGarden, gardenSize);
 
-    Plant::displayStatics();  
+    Plant::displayStatics();
 
-    delete[] myGarden;  
+    delete[] myGarden;
     return 0;
 }
