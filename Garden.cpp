@@ -4,10 +4,10 @@ using namespace std;
 
 class AbstractPlant {
 public:
-    virtual void water() = 0; 
-    virtual void displayStatus() const = 0; 
+    virtual void water() = 0;
+    virtual void displayStatus() const = 0;
 };
-
+//
 class Plant : public AbstractPlant {
 private:
     string name;
@@ -20,32 +20,18 @@ public:
     static int totalPlants;
     static int totalWaterUsed;
 
-    // Default constructor
-    Plant() {
-        this->name = "";
-        this->type = "";
-        this->growthStage = "seedling";
-        this->waterLevel = 0;
-        this->maxWaterLevel = 0;
+    Plant() : name(""), type(""), growthStage("seedling"), waterLevel(0), maxWaterLevel(0) {
         totalPlants++;
     }
 
-    // Parameterized constructor
-    Plant(string n, string t, int maxWater) {
-        name = n;
-        type = t;
-        growthStage = "seedling";
-        waterLevel = 0;
-        maxWaterLevel = maxWater;
+    Plant(string n, string t, int maxWater) : name(n), type(t), growthStage("seedling"), waterLevel(0), maxWaterLevel(maxWater) {
         totalPlants++;
     }
 
-    // Destructor
     ~Plant() {
         totalPlants--;
     }
 
-    // Member functions
     void setName(string n) { this->name = n; }
     string getName() const { return this->name; }
 
@@ -71,12 +57,12 @@ public:
         }
     }
 
-    void displayStatus() const override { 
+    void displayStatus() const override {
         cout << "Plant: " << getName() << ", Type: " << getType()
              << ", Growth Stage: " << getGrowthStage()
              << ", Water Level: " << getWaterLevel() << "/" << getMaxWaterLevel() << endl;
     }
-
+// 
     static void displayStatics() {
         cout << "Total Plants: " << totalPlants << endl;
         cout << "Total Water Used: " << totalWaterUsed << endl;
@@ -86,7 +72,7 @@ public:
 int Plant::totalPlants = 0;
 int Plant::totalWaterUsed = 0;
 
-// Single Inheritance
+// 
 class FloweringPlant : public Plant {
 private:
     string flowerColor;
@@ -104,13 +90,12 @@ public:
         cout << "Flower Color: " << getFlowerColor() << endl;
     }
 
-    void displayStatus() const override { 
-        Plant::displayStatus(); 
+    void displayStatus() const override {
+        Plant::displayStatus();
         displayFlowerInfo();
     }
 };
 
-// Multilevel Inheritance
 class GardenPlant : public FloweringPlant {
 private:
     string season;
@@ -125,7 +110,7 @@ public:
     string getSeason() const { return season; }
 
     void displayGardenPlantInfo() const {
-        displayStatus(); 
+        displayStatus();
         cout << "Bloom Season: " << getSeason() << endl;
     }
 };
@@ -137,7 +122,7 @@ private:
 public:
     void setUserName(string name) { this->userName = name; }
     string getUserName() const { return this->userName; }
-
+//
     void createGardenPlant(GardenPlant& p) {
         string name, type, color, season;
         int maxWaterLevel;
@@ -155,7 +140,7 @@ public:
 
         p = GardenPlant(name, type, maxWaterLevel, color, season);
     }
-
+//
     void waterPlants(GardenPlant* plants, int size) {
         bool allPlantsFullyWatered = false;
         while (!allPlantsFullyWatered) {
@@ -168,7 +153,7 @@ public:
             }
         }
     }
-
+//
     void checkPlants(const GardenPlant* plants, int size) const {
         for (int i = 0; i < size; i++) {
             plants[i].displayGardenPlantInfo();
