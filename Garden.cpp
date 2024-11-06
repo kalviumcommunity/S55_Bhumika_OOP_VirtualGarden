@@ -2,14 +2,12 @@
 #include <string>
 using namespace std;
 
-// AbstractPlant now only handles watering and status display, making it adhere to SRP
 class AbstractPlant {
 public:
-    virtual void water() = 0; 
-    virtual void displayStatus() const = 0; 
+    virtual void water() = 0;
+    virtual void displayStatus() const = 0;
 };
-
-// Plant class is responsible only for plant properties and watering, adhering to SRP
+//
 class Plant : public AbstractPlant {
 private:
     string name;
@@ -22,32 +20,18 @@ public:
     static int totalPlants;
     static int totalWaterUsed;
 
-    // Default constructor
-    Plant() {
-        this->name = "";
-        this->type = "";
-        this->growthStage = "seedling";
-        this->waterLevel = 0;
-        this->maxWaterLevel = 0;
+    Plant() : name(""), type(""), growthStage("seedling"), waterLevel(0), maxWaterLevel(0) {
         totalPlants++;
     }
 
-    // Parameterized constructor
-    Plant(string n, string t, int maxWater) {
-        name = n;
-        type = t;
-        growthStage = "seedling";
-        waterLevel = 0;
-        maxWaterLevel = maxWater;
+    Plant(string n, string t, int maxWater) : name(n), type(t), growthStage("seedling"), waterLevel(0), maxWaterLevel(maxWater) {
         totalPlants++;
     }
 
-    // Destructor
     ~Plant() {
         totalPlants--;
     }
 
-    // Getter and Setter functions give each method a single purpose (SRP)
     void setName(string n) { this->name = n; }
     string getName() const { return this->name; }
 
@@ -63,7 +47,6 @@ public:
     void setMaxWaterLevel(int level) { this->maxWaterLevel = level; }
     int getMaxWaterLevel() const { return this->maxWaterLevel; }
 
-    // Responsibility for watering is specific to this method, following SRP
     void water() override {
         if (this->waterLevel < this->maxWaterLevel) {
             setWaterLevel(this->waterLevel + 1);
@@ -74,14 +57,12 @@ public:
         }
     }
 
-    // Status display is separated, following SRP
-    void displayStatus() const override { 
+    void displayStatus() const override {
         cout << "Plant: " << getName() << ", Type: " << getType()
              << ", Growth Stage: " << getGrowthStage()
              << ", Water Level: " << getWaterLevel() << "/" << getMaxWaterLevel() << endl;
     }
-
-    // Static function displays plant statistics, adhering to SRP by separating functionality
+// 
     static void displayStatics() {
         cout << "Total Plants: " << totalPlants << endl;
         cout << "Total Water Used: " << totalWaterUsed << endl;
@@ -91,7 +72,7 @@ public:
 int Plant::totalPlants = 0;
 int Plant::totalWaterUsed = 0;
 
-// FloweringPlant focuses only on flower-specific details, following SRP
+// 
 class FloweringPlant : public Plant {
 private:
     string flowerColor;
@@ -105,18 +86,16 @@ public:
     void setFlowerColor(string color) { flowerColor = color; }
     string getFlowerColor() const { return flowerColor; }
 
-    // Responsibility for displaying flower info is specific to this method, adhering to SRP
     void displayFlowerInfo() const {
         cout << "Flower Color: " << getFlowerColor() << endl;
     }
 
-    void displayStatus() const override { 
-        Plant::displayStatus(); 
+    void displayStatus() const override {
+        Plant::displayStatus();
         displayFlowerInfo();
     }
 };
 
-// GardenPlant adds only season information, adhering to SRP
 class GardenPlant : public FloweringPlant {
 private:
     string season;
@@ -130,14 +109,12 @@ public:
     void setSeason(string s) { season = s; }
     string getSeason() const { return season; }
 
-    // Separate method to display garden plant info, adhering to SRP
     void displayGardenPlantInfo() const {
-        displayStatus(); 
+        displayStatus();
         cout << "Bloom Season: " << getSeason() << endl;
     }
 };
 
-// User class handles only user-specific actions, keeping to SRP
 class User {
 private:
     string userName;
@@ -145,8 +122,7 @@ private:
 public:
     void setUserName(string name) { this->userName = name; }
     string getUserName() const { return this->userName; }
-
-    // Responsibility for creating garden plants is specific to this method
+//
     void createGardenPlant(GardenPlant& p) {
         string name, type, color, season;
         int maxWaterLevel;
@@ -164,8 +140,7 @@ public:
 
         p = GardenPlant(name, type, maxWaterLevel, color, season);
     }
-
-    // Responsibility for watering plants is separate, following SRP
+//
     void waterPlants(GardenPlant* plants, int size) {
         bool allPlantsFullyWatered = false;
         while (!allPlantsFullyWatered) {
@@ -178,8 +153,7 @@ public:
             }
         }
     }
-
-    // Responsibility for checking plant status is separate, following SRP
+//
     void checkPlants(const GardenPlant* plants, int size) const {
         for (int i = 0; i < size; i++) {
             plants[i].displayGardenPlantInfo();
